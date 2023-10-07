@@ -18,7 +18,7 @@ class Demande
     private ?\DateTimeInterface $date_debut = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $date_but = null;
+    private ?\DateTimeInterface $date_fin = null;
 
     #[ORM\Column(length: 255)]
     private ?string $duree = null;
@@ -26,7 +26,7 @@ class Demande
     #[ORM\Column(length: 255)]
     private ?string $type = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $observation = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
@@ -55,14 +55,14 @@ class Demande
         return $this;
     }
 
-    public function getDateBut(): ?\DateTimeInterface
+    public function getDateFin(): ?\DateTimeInterface
     {
-        return $this->date_but;
+        return $this->date_fin;
     }
 
-    public function setDateBut(\DateTimeInterface $date_but): static
+    public function setDateFin(\DateTimeInterface $date_fin): static
     {
-        $this->date_but = $date_but;
+        $this->date_fin = $date_fin;
 
         return $this;
     }
