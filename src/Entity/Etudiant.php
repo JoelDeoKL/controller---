@@ -50,6 +50,9 @@ class Etudiant  implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $promotion = null;
+
     public function __construct()
     {
         $this->demandes = new ArrayCollection();
@@ -220,5 +223,17 @@ class Etudiant  implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getPromotion(): ?string
+    {
+        return $this->promotion;
+    }
+
+    public function setPromotion(string $promotion): static
+    {
+        $this->promotion = $promotion;
+
+        return $this;
     }
 }

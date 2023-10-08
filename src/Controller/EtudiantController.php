@@ -59,4 +59,35 @@ class EtudiantController extends AbstractController
         }
     }
 
+    #[Route('/detail_etudiant/{id<\d+>}', name: 'detail_etudiant')]
+    public function detail_etudiant(ManagerRegistry $doctrine, Etudiant $etudiant= null, $id): Response
+    {
+        if(!$etudiant){
+            $this->addFlash('error', "Cet etudiant n'existe pas !");
+            return $this->redirectToRoute("etudiants");
+        }
+        return $this->render('econome/etudiant_details.html.twig', ['etudiant' => $etudiant]);
+    }
+
+    #[Route('/delete_etudiant/{id?0}', name: 'delete_etudiant')]
+    public function delete_etudiant(Etudiant $etudiant = null, ManagerRegistry $doctrine, Request $request, $id): Response
+    {
+
+        $repository = $doctrine->getRepository(Etudiant::class);
+        $etudiant = $repository->find($id);
+
+        $manager = $doctrine->getManager();
+        $manager->remove($etudiant);
+
+        $manager->flush();
+
+        $message = "L'étudiant a été supprimer avec succès";
+
+
+        $this->addFlash("succes", $message);
+
+        return $this->redirectToRoute("etudiants");
+
+    }
+
 }
