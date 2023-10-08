@@ -20,7 +20,7 @@ class EtudiantController extends AbstractController
     {
         $etudiants = $entityManager->getRepository(Etudiant::class)->findAll();
 
-        return $this->render('admin/etudiants.html.twig', ['etudiants' => $etudiants]);
+        return $this->render('admin/etudiant_details.html.twig', ['etudiants' => $etudiants]);
     }
 
     #[Route('/editer_etudiant/{id?0}', name: 'editer_etudiant')]
@@ -66,7 +66,7 @@ class EtudiantController extends AbstractController
             $this->addFlash('error', "Cet etudiant n'existe pas !");
             return $this->redirectToRoute("etudiants");
         }
-        return $this->render('econome/etudiant_details.html.twig', ['etudiant' => $etudiant]);
+        return $this->render('admin/etudiant_details.html.twig', ['etudiant' => $etudiant]);
     }
 
     #[Route('/delete_etudiant/{id?0}', name: 'delete_etudiant')]

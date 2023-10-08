@@ -1,0 +1,53 @@
+{% extends 'template_dash.html.twig' %}
+
+{% block title %} StageManager | Detail Entreprise {% endblock %}
+
+{% block body %}
+
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <h1 class="h3 mb-1 text-gray-800">{{ entreprise.nom_entreprise }}</h1>
+        
+        <!-- Content Row -->
+        <div class="row">
+            <div class="card shadow col-lg-12">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Details sur les informations concernant l'entreprise {{ entreprise.nom_entreprise }}</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h6>Nom de l'entreprise: {{ entreprise.nom_entreprise }}</h6>
+                            <h6>Description : {{ entreprise.description }}</h6>
+                            <h6>Adresse : {{ entreprise.adresse }}</h6>
+                            <h6>Téléphone : {{ entreprise.telephone }}</h6>
+                            <h6>L'état de l'entreprise : {{ entreprise.etat_entreprise }}</h6>
+                            <h6>Secteur : {{ entreprise.secteur_entreprise }}</h6>
+                            <h6>Email de l'entreprise : {{ entreprise.email_entreprise }} </h6>
+                            <h6>Téléphone de l'entreprise : {{ entreprise.telephone }} </h6>
+                            <h6>Nombre des places admissible : {{ entreprise.nombre_place }} </h6>
+                            <h6>Date de création : {{ entreprise.date_creation|date('Y-m-d') }}</h6>
+                        </div>
+                        <div class="col-lg-12">
+                            <h6>Logo : <img width="270" src="{{ asset('uploads/images/') }}{{ entreprise.logo }}" alt="user image"></h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h6>
+                        <a href="" class="btn btn-primary">Voir les departements</a>
+                        <a href="" class="btn btn-primary">Voir les etudiants</a>
+                        <a href="" class="btn btn-primary">Modifier</a>
+                        <a href="" class="btn btn-primary">Supprimer</a>
+                    </h6>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container-fluid -->
+
+
+  {% endblock %}

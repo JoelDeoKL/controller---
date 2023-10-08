@@ -1,0 +1,44 @@
+{% extends 'template_dash.html.twig' %}
+
+{% block title %} StageManager | Detail Etudiant {% endblock %}
+
+{% block body %}
+
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <h1 class="h3 mb-1 text-gray-800">{{ etudiant.nom }} {{ etudiant.postnom }} {{ etudiant.prenom }}</h1>
+        
+        <!-- Content Row -->
+        <div class="row">
+            <div class="card shadow col-lg-12">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Details sur les informations concernant {{ etudiant.prenom }}</h6>
+                </div>
+                <div class="card-body">
+                    <h6>Nom : {{ etudiant.nom }}</h6>
+                    <h6>Postnom : {{ etudiant.postnom }}</h6>
+                    <h6>Prenom : {{ etudiant.prenom }}</h6>
+                    <h6>Promotion : {{ etudiant.promotion }}</h6>
+                    <h6>Email : {{ etudiant.email_etudiant }}</h6>
+                    <h6>Téléphone : {{ etudiant.telephone }}</h6>
+                    <h6>Etat de l'étudiant : {{ etudiant.etat }} </h6>
+                    <h6>Date de création : {{ etudiant.date_creation|date('Y-m-d') }}</h6>
+                </div>
+                <div class="card-body">
+                    <h6>
+                        <a href="" class="btn btn-primary">Voir les taches</a>
+                        <a href="" class="btn btn-primary">Donner une cote</a>
+                        <a href="" class="btn btn-primary">Modifier</a>
+                        <a href="" class="btn btn-primary">Supprimer</a>
+                    </h6>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container-fluid -->
+
+
+  {% endblock %}

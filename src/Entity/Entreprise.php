@@ -61,6 +61,12 @@ class Entreprise
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $telephone = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $logo = null;
+
     public function __construct()
     {
         $this->cote = new ArrayCollection();
@@ -327,6 +333,30 @@ class Entreprise
     public function setPassword(string $password): static
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getTelephone(): ?string
+    {
+        return $this->telephone;
+    }
+
+    public function setTelephone(string $telephone): static
+    {
+        $this->telephone = $telephone;
+
+        return $this;
+    }
+
+    public function getLogo(): ?string
+    {
+        return $this->logo;
+    }
+
+    public function setLogo(string $logo): static
+    {
+        $this->logo = $logo;
 
         return $this;
     }
