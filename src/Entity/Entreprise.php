@@ -58,6 +58,9 @@ class Entreprise
     #[ORM\OneToMany(mappedBy: 'entreprise', targetEntity: Departement::class)]
     private Collection $departements;
 
+    #[ORM\Column(length: 255)]
+    private ?string $password = null;
+
     public function __construct()
     {
         $this->cote = new ArrayCollection();
@@ -314,5 +317,17 @@ class Entreprise
     public function __toString()
     {
         return $this->nom_entreprise;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): static
+    {
+        $this->password = $password;
+
+        return $this;
     }
 }
