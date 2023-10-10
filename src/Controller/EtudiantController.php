@@ -20,7 +20,7 @@ class EtudiantController extends AbstractController
     {
         $etudiants = $entityManager->getRepository(Etudiant::class)->findAll();
 
-        return $this->render('admin/etudiant_details.html.twig', ['etudiants' => $etudiants]);
+        return $this->render('admin/etudiants.html.twig', ['etudiants' => $etudiants]);
     }
 
     #[Route('/editer_etudiant/{id?0}', name: 'editer_etudiant')]
@@ -33,6 +33,7 @@ class EtudiantController extends AbstractController
         }
 
         $form = $this->createForm(EtudiantType::class, $etudiant);
+
         //dd($request->request);
         $form->handleRequest($request);
 
@@ -40,7 +41,7 @@ class EtudiantController extends AbstractController
 
             $manager = $doctrine->getManager();
             $manager->persist($etudiant);
-
+                
             $manager->flush();
 
             if($new){

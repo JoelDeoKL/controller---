@@ -73,6 +73,26 @@
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
+                                        {{ form_label(form.promotion) }}
+                                        {{ form_widget(form.promotion, {'attr': {
+                                            'class':'required form-control',
+                                            'placeholder':'L4 MSI'
+                                        }}) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        {{ form_label(form.telephone_etudiant) }}
+                                        {{ form_widget(form.telephone_etudiant, {'attr': {
+                                            'class':'required form-control',
+                                            'placeholder':'0999563455'
+                                        }}) }}
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
                                         {{ form_label(form.date_creation) }}
                                         {{ form_widget(form.date_creation, {'attr': {
                                             'class':'required form-control',

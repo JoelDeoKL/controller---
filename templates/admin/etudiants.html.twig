@@ -34,11 +34,11 @@
                                                 <td>{{ etudiant.nom }}</td>
                                                 <td>{{ etudiant.postnom }}</td>
                                                 <td>{{ etudiant.prenom }}</td>
-                                                <td>{{ etudiant.email_etudiant }}</td>
+                                                <td>{{ etudiant.emailEtudiant }}</td>
                                                 <td>{{ etudiant.promotion }}</td>
                                                 <td>
-                                                    <a href="{{ path("etudiant_detail", {id: etudiant.id}) }}" class="btn btn-primary">Voir</a>
-                                                    <a href="{{ path("edit_etudiant", {id: etudiant.id}) }}" class="btn btn-primary">Modifier</a>
+                                                    <a href="{{ path("detail_etudiant", {id: etudiant.id}) }}" class="btn btn-primary">Voir</a>
+                                                    <a href="{{ path("editer_etudiant", {id: etudiant.id}) }}" class="btn btn-primary">Modifier</a>
                                                     <a href="{{ path("delete_etudiant", {id: etudiant.id}) }}" class="btn btn-primary">Supprimer</a>
                                                 </td>
                                             </tr>

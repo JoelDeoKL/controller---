@@ -38,9 +38,6 @@ class Etudiant  implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $etat_etudiant = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $date_creation = null;
-
     #[ORM\OneToMany(mappedBy: 'etudiant', targetEntity: Demande::class)]
     private Collection $demandes;
 
@@ -52,6 +49,9 @@ class Etudiant  implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     private ?string $promotion = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $date_creation = null;
 
     public function __construct()
     {
@@ -131,18 +131,6 @@ class Etudiant  implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEtatEtudiant(?string $etat_etudiant): static
     {
         $this->etat_etudiant = $etat_etudiant;
-
-        return $this;
-    }
-
-    public function getDateCreation(): ?string
-    {
-        return $this->date_creation;
-    }
-
-    public function setDateCreation(string $date_creation): static
-    {
-        $this->date_creation = $date_creation;
 
         return $this;
     }
@@ -233,6 +221,18 @@ class Etudiant  implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPromotion(string $promotion): static
     {
         $this->promotion = $promotion;
+
+        return $this;
+    }
+
+    public function getDateCreation(): ?\DateTimeInterface
+    {
+        return $this->date_creation;
+    }
+
+    public function setDateCreation(\DateTimeInterface $date_creation): static
+    {
+        $this->date_creation = $date_creation;
 
         return $this;
     }
