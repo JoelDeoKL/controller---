@@ -22,19 +22,19 @@ class Entreprise
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description_entreprise = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $adresse_entreprise = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $telephone_entreprise = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $etat_entreprise = null;
 
     #[ORM\Column(length: 255)]
     private ?string $secteur_entreprise = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_creation = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
@@ -43,7 +43,7 @@ class Entreprise
     #[ORM\Column(length: 255)]
     private ?string $email_entreprise = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $nombre_place = null;
 
     #[ORM\OneToMany(mappedBy: 'entreprise', targetEntity: Cote::class)]
@@ -58,14 +58,20 @@ class Entreprise
     #[ORM\OneToMany(mappedBy: 'entreprise', targetEntity: Departement::class)]
     private Collection $departements;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $password = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $telephone = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $logo = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $rccm = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $idnat = null;
 
     public function __construct()
     {
@@ -357,6 +363,30 @@ class Entreprise
     public function setLogo(string $logo): static
     {
         $this->logo = $logo;
+
+        return $this;
+    }
+
+    public function getRccm(): ?string
+    {
+        return $this->rccm;
+    }
+
+    public function setRccm(string $rccm): static
+    {
+        $this->rccm = $rccm;
+
+        return $this;
+    }
+
+    public function getIdnat(): ?string
+    {
+        return $this->idnat;
+    }
+
+    public function setIdnat(string $idnat): static
+    {
+        $this->idnat = $idnat;
 
         return $this;
     }
