@@ -768,28 +768,17 @@
                     }}) }}
                 </div>
               </div>
-              <div class="form-group">
-                {{ form_label(form.description_entreprise) }}
-                {{ form_widget(form.description_entreprise, {'attr': {
-                    'class':'required form-control',
-                    'row':'30',
-                }}) }}
-                <div class="form-group">
-                {{ form_label(form.date_creation) }}
-                {{ form_widget(form.date_creation) }}
-              </div>
-               <div class="form-group">
-                {{ form_label(form.date_validation) }}
-                {{ form_widget(form.date_validation) }}
-              </div>
-               <div class="form-group">
-                {{ form_label(form.password) }}
-                {{ form_widget(form.password) }}
-              </div>
-              <div class="form-group">
-                {{ form_label(form.logo) }}
-                {{ form_widget(form.logo) }}
-              </div>
+              <div class="row">
+                <div class="form-group col-md-6">
+                  {{ form_label(form.description_entreprise) }}
+                  {{ form_widget(form.description_entreprise, {'attr': {
+                      'class':'required form-control',
+                      'row':'30',
+                  }}) }}
+                </div>
+                
+              
+              
               <div class="text-center">{{ form_widget(form.postuler, {'attr': {'class':'btn btn-primaryr'}}) }}</div>
             </form>
           </div>

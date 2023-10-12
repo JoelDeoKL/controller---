@@ -23,6 +23,14 @@ class DemandeController extends AbstractController
         return $this->render('demandes/mes_demandes.html.twig', ['demandes' => $demandes]);
     }
 
+    #[Route('/demandes', name: 'demandes')]
+    public function demandes(EntityManagerInterface $entityManager): Response
+    {
+        $demandes = $entityManager->getRepository(Demande::class)->findAll();
+
+        return $this->render('rh/demandes.html.twig', ['demandes' => $demandes]);
+    }
+
     #[Route('/editer_demande/{id?0}', name: 'editer_demande')]
     public function editer_demande(Demande $demande = null, ManagerRegistry $doctrine, Request $request): Response
     {
@@ -52,7 +60,7 @@ class DemandeController extends AbstractController
 
             return $this->redirectToRoute("mes_demandes");
         }else{
-            return $this->render('stagiaire/add_demande.html.twig', [
+            return $this->render('stagiaire/demande.html.twig', [
                 'form' => $form->createView()
             ]);
         }

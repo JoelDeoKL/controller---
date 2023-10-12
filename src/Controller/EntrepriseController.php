@@ -49,4 +49,12 @@ class EntrepriseController extends AbstractController
         return $this->redirectToRoute("entreprises");
 
     }
+
+    #[Route('/les_entreprises', name: 'les_entreprises')]
+    public function les_entreprises(EntityManagerInterface $entityManager): Response
+    {
+        $entreprises = $entityManager->getRepository(Entreprise::class)->findAll();
+
+        return $this->render('stagiaire/entreprises.html.twig', ['entreprises' => $entreprises]);
+    }
 }

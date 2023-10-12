@@ -32,6 +32,9 @@ class Tache
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_fermeture = null;
 
+    #[ORM\ManyToOne(inversedBy: 'taches')]
+    private ?Etudiant $etudiant = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -105,6 +108,18 @@ class Tache
     public function setDateFermeture(?\DateTimeInterface $date_fermeture): static
     {
         $this->date_fermeture = $date_fermeture;
+
+        return $this;
+    }
+
+    public function getEtudiant(): ?Etudiant
+    {
+        return $this->etudiant;
+    }
+
+    public function setEtudiant(?Etudiant $etudiant): static
+    {
+        $this->etudiant = $etudiant;
 
         return $this;
     }
