@@ -1,0 +1,56 @@
+{% extends 'template_stage.html.twig' %}
+
+{% block title %} StageManager | Demandes {% endblock %}
+
+{% block body %}
+              
+        <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800">Liste de mes demandes de stage</h1>
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">DataTables Demande</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Nom de l'entreprise</th>
+                                            <th>Durée</th>
+                                            <th>Date début</th>
+                                            <th>Date fin</th>
+                                            <th>Date soumission</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for demande in demandes %}
+                                            <tr>
+                                                <td>{{ demande.entreprise }}</td>
+                                                <td>{{ demande.duree }}</td>
+                                                <td>{{ demande.dateDebut|date("Y-m-d") }}</td>
+                                                <td>{{ demande.dateFin|date("Y-m-d") }}</td>
+                                                <td>{{ demande.dateDemande|date("Y-m-d") }}</td>
+                                                <td>
+                                                    <a href="{{ path("details_demande", {id: demande.id}) }}" class="btn btn-primary">Voir</a>
+                                                    <a href="{{ path("editer_demande", {id: demande.id}) }}" class="btn btn-primary">Modifier</a>
+                                                    <a href="{{ path("delete_demande", {id: demande.id}) }}" class="btn btn-primary">Supprimer</a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+
+  {% endblock %}

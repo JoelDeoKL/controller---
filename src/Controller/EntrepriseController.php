@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Entreprise;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
+
 
 class EntrepriseController extends AbstractController
 {
@@ -27,6 +29,16 @@ class EntrepriseController extends AbstractController
             return $this->redirectToRoute("entreprises");
         }
         return $this->render('admin/entreprise_details.html.twig', ['entreprise' => $entreprise]);
+    }
+
+    #[Route('/details_entreprise/{id<\d+>}', name: 'details_entreprise')]
+    public function details_entreprise(ManagerRegistry $doctrine, Entreprise $entreprise= null, $id): Response
+    {
+        if(!$entreprise){
+            $this->addFlash('error', "Cet entreprise n'existe pas !");
+            return $this->redirectToRoute("entreprises");
+        }
+        return $this->render('stagiaire/entreprise_details.html.twig', ['entreprise' => $entreprise]);
     }
 
     #[Route('/delete_entreprise/{id?0}', name: 'delete_entreprise')]

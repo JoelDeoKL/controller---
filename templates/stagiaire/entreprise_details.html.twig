@@ -1,4 +1,4 @@
-{% extends 'template_dash.html.twig' %}
+{% extends 'template_stage.html.twig' %}
 
 {% block title %} StageManager | Detail Entreprise {% endblock %}
 
@@ -38,8 +38,7 @@
                 <div class="card-body">
                     <h6>
                         <a href="" class="btn btn-primary">Voir les departements</a>
-                        <a href="" class="btn btn-primary">Voir les etudiants</a>
-                        <a href="{{ path("delete_entreprise", {id: entreprise.id}) }}" class="btn btn-primary">Supprimer</a>
+                        <a href="{{ path("editer_demande", {id: entreprise.id}) }}" class="btn btn-primary">Postuler</a>
                     </h6>
                 </div>
             </div>

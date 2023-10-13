@@ -20,7 +20,7 @@ class DemandeController extends AbstractController
     {
         $demandes = $entityManager->getRepository(Demande::class)->findAll();
 
-        return $this->render('demandes/mes_demandes.html.twig', ['demandes' => $demandes]);
+        return $this->render('stagiaire/mes_demandes.html.twig', ['demandes' => $demandes]);
     }
 
     #[Route('/demandes', name: 'demandes')]
@@ -64,5 +64,36 @@ class DemandeController extends AbstractController
                 'form' => $form->createView()
             ]);
         }
+    }
+
+    #[Route('/details_demande/{id<\d+>}', name: 'details_demande')]
+    public function details_demande(ManagerRegistry $doctrine, Demande $demande= null, $id): Response
+    {
+        if(!$demande){
+            $this->addFlash('error', "Cette demande n'existe pas !");
+            return $this->redirectToRoute("mes_demandes");
+        }
+        return $this->render('stagiaire/demande_details.html.twig', ['demande' => $demande]);
+    }
+
+    #[Route('/delete_demande/{id?0}', name: 'delete_demande')]
+    public function delete_demande(Demande $demande = null, ManagerRegistry $doctrine, Request $request, $id): Response
+    {
+
+        $repository = $doctrine->getRepository(Demande::class);
+        $demande = $repository->find($id);
+
+        $manager = $doctrine->getManager();
+        $manager->remove($demande);
+
+        $manager->flush();
+
+        $message = "La demande a été supprimer avec succès";
+
+
+        $this->addFlash("succes", $message);
+
+        return $this->redirectToRoute("mes_demandes");
+
     }
 }

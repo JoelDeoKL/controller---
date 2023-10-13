@@ -37,9 +37,9 @@
                                                 <td>{{ demande.dateFin|date("Y-m-d") }}</td>
                                                 <td>{{ demande.duree }}</td>
                                                 <td>
-                                                    <a href="" class="btn btn-primary">Voir plus</a>
-                                                    <a href="" class="btn btn-primary">Accepter</a>
-                                                    <a href="" class="btn btn-primary">Supprimer</a>
+                                                    <a href="{{ path("detail_etudiant", {id: demande.id}) }}" class="btn btn-primary">Voir plus</a>
+                                                    <a href="{{ path("accepter", {id: demande.id}) }}" class="btn btn-primary">Accepter</a>
+                                                    <a href="{{ path("supprimer", {id: demande.id}) }}" class="btn btn-primary">Supprimer</a>
                                                 </td>
                                             </tr>
                                         {% endfor %}

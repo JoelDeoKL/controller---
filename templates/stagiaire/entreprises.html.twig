@@ -37,9 +37,8 @@
                                                 <td>{{ entreprise.nombrePlace }}</td>
                                                 <td>{{ entreprise.telephoneEntreprise }}</td>
                                                 <td>
-                                                    <a href="{{ path("detail_entreprise", {id: entreprise.id}) }}" class="btn btn-primary">Voir</a>
-                                                    <a href="" class="btn btn-primary">Modifier</a>
-                                                    <a href="{{ path("delete_entreprise", {id: entreprise.id}) }}" class="btn btn-primary">Supprimer</a>
+                                                    <a href="{{ path("details_entreprise", {id: entreprise.id}) }}" class="btn btn-primary">Voir</a>
+                                                    <a href="{{ path("editer_demande", {id: entreprise.id}) }}" class="btn btn-primary">Postuler</a>
                                                 </td>
                                             </tr>
                                         {% endfor %}
