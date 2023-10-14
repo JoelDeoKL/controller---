@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\DepartementRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -31,6 +33,14 @@ class Departement
 
     #[ORM\ManyToOne(inversedBy: 'departements')]
     private ?Entreprise $entreprise = null;
+
+    #[ORM\OneToMany(mappedBy: 'departement', targetEntity: Tache::class)]
+    private Collection $taches;
+
+    public function __construct()
+    {
+        $this->taches = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -105,6 +115,36 @@ class Departement
     public function setEntreprise(?Entreprise $entreprise): static
     {
         $this->entreprise = $entreprise;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Tache>
+     */
+    public function getTaches(): Collection
+    {
+        return $this->taches;
+    }
+
+    public function addTach(Tache $tach): static
+    {
+        if (!$this->taches->contains($tach)) {
+            $this->taches->add($tach);
+            $tach->setDepartement($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTach(Tache $tach): static
+    {
+        if ($this->taches->removeElement($tach)) {
+            // set the owning side to null (unless already changed)
+            if ($tach->getDepartement() === $this) {
+                $tach->setDepartement(null);
+            }
+        }
 
         return $this;
     }

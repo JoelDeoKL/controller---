@@ -23,7 +23,7 @@ class Tache
     #[ORM\Column(length: 255)]
     private ?string $etat = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $observation = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
@@ -34,6 +34,9 @@ class Tache
 
     #[ORM\ManyToOne(inversedBy: 'taches')]
     private ?Etudiant $etudiant = null;
+
+    #[ORM\ManyToOne(inversedBy: 'taches')]
+    private ?Departement $departement = null;
 
     public function getId(): ?int
     {
@@ -120,6 +123,18 @@ class Tache
     public function setEtudiant(?Etudiant $etudiant): static
     {
         $this->etudiant = $etudiant;
+
+        return $this;
+    }
+
+    public function getDepartement(): ?Departement
+    {
+        return $this->departement;
+    }
+
+    public function setDepartement(?Departement $departement): static
+    {
+        $this->departement = $departement;
 
         return $this;
     }

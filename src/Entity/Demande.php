@@ -38,6 +38,9 @@ class Demande
     #[ORM\ManyToOne(inversedBy: 'demandes')]
     private ?Entreprise $entreprise = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $etat = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -135,6 +138,18 @@ class Demande
     public function setEntreprise(?Entreprise $entreprise): static
     {
         $this->entreprise = $entreprise;
+
+        return $this;
+    }
+
+    public function getEtat(): ?string
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(string $etat): static
+    {
+        $this->etat = $etat;
 
         return $this;
     }

@@ -1,0 +1,46 @@
+{% extends 'template_stage.html.twig' %}
+
+{% block title %} StageManager | Detail Tache {% endblock %}
+
+{% block body %}
+
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <h1 class="h3 mb-1 text-gray-800">{{ tache.departement }}</h1>
+        
+        <!-- Content Row -->
+        <div class="row">
+            <div class="card shadow col-lg-12">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Voir plus d'informations sur mes taches {{ tache.departement }}</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h6>Nom de l'entreprise: {{ tache.entreprise }}</h6>
+                            <h6>Date debut : {{ tache.dateDebut|date('Y-m-d') }}</h6>
+                            <h6>Date fin : {{ tache.dateFin|date('Y-m-d') }}</h6>
+                            <h6>Duree : {{ tache.duree }}</h6>
+                            <h6>type de stage : {{ tache.type }}</h6>
+                            <h6>Observation : {{ tache.observation }}</h6>
+                            <h6>Date de la soumission : {{ tache.dateDemande|date('Y-m-d') }}</h6>
+                        </div>
+                       
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h6>
+                        <a href="" class="btn btn-primary">Voir les departements</a>
+                        <a href="{{ path("editer_demande", {id: tache.id}) }}" class="btn btn-primary">Postuler</a>
+                    </h6>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container-fluid -->
+
+
+  {% endblock %}

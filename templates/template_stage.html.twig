@@ -89,23 +89,10 @@
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="utilities-color.html">Voir toutes les taches</a>
-                        <a class="collapse-item" href="utilities-color.html">Voir les taches en cours</a>
-                        <a class="collapse-item" href="utilities-color.html">Voir les taches remplies</a>
-                    </div>
-                </div>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Rapports de stage</span>
-                </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="login.html">Voir tous les rapports</a>
-                        <a class="collapse-item" href="register.html">Voir les cotes</a>
+                        <a class="collapse-item" href="{{ path("editer_tache") }}">Ajouter une tache</a>
+                        <a class="collapse-item" href="{{ path("mes_taches") }}">Voir toutes les taches</a>
+                        <a class="collapse-item" href="{{ path("taches_encours") }}">Voir les taches en cours</a>
+                        <a class="collapse-item" href="{{ path("taches_remplies") }}">Voir les taches remplies</a>
                     </div>
                 </div>
             </li>

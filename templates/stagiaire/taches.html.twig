@@ -1,0 +1,55 @@
+{% extends 'template_stage.html.twig' %}
+
+{% block title %} StageManager | Taches {% endblock %}
+
+{% block body %}
+              
+        <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800">Liste toutes les taches assignées</h1>
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">DataTables Taches</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Nom tache</th>
+                                            <th>Description</th>
+                                            <th>Departement</th>
+                                            <th>Etat</th>
+                                            <th>Date Assignation</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for tache in taches %}
+                                            <tr>
+                                                <td>{{ tache.nom }}</td>
+                                                <td>{{ tache.description }}</td>
+                                                <td>{{ tache.departement }}</td>
+                                                <td>{{ tache.etat }}</td>
+                                                <td>{{ tache.dateCreation|date("Y-m-d") }}</td>
+                                                <td>
+                                                    <a href="{{ path("details_tache", {id: tache.id}) }}" class="btn btn-primary">Voir</a>
+                                                    <a href="{{ path("editer_tache", {id: tache.id}) }}" class="btn btn-primary">Modififer</a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+
+  {% endblock %}
