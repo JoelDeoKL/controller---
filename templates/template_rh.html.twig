@@ -72,8 +72,8 @@
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="buttons.html">Voir tous les départements</a>
-                        <a class="collapse-item" href="cards.html">Ajouter un département</a>
+                        <a class="collapse-item" href="{{ path("departements") }}">Voir tous les départements</a>
+                        <a class="collapse-item" href="{{ path("editer_departement") }}">Ajouter un département</a>
                     </div>
                 </div>
             </li>
@@ -88,8 +88,10 @@
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="utilities-color.html">Voir toutes les etudiants</a>
+                        <a class="collapse-item" href="{{ path("nos_stagiaires") }}">Voir tous les etudiants</a>
                         <a class="collapse-item" href="{{ path("demandes") }}">Voir les demandes en cours</a>
+                        <a class="collapse-item" href="{{ path("affecter_departement") }}">Affecter à un departement</a>
+                        <a class="collapse-item" href="{{ path("attribuer_cote") }}">Attribuer une cote</a>
                     </div>
                 </div>
             </li>
@@ -98,12 +100,12 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                     aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-folder"></i>
-                    <span>Rapports de stage</span>
+                    <span>Rapports du stage</span>
                 </a>
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="login.html">Voir tous les rapports</a>
-                        <a class="collapse-item" href="register.html">Voir les cotes</a>
+                        <a class="collapse-item" href="login.html">Voir tous les taches</a>
+                        <a class="collapse-item" href="register.html">Voir les cotes</a>ù
                     </div>
                 </div>
             </li>

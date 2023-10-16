@@ -1,0 +1,55 @@
+{% extends 'template_rh.html.twig' %}
+
+{% block title %} StageManager | Departement {% endblock %}
+
+{% block body %}
+              
+        <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800">Liste de toutes les departements dans notre entreprise</h1>
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">DataTables Departement</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Nom du departement</th>
+                                            <th>Description</th>
+                                            <th>Nombre heure</th>
+                                            <th>Observation</th>
+                                            <th>Date de creation</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for departement in departements %}
+                                            <tr>
+                                                <td>{{ departement.nomDepartement }}</td>
+                                                <td>{{ departement.descriptionDepartement }}</td>
+                                                <td>{{ departement.nombreHeure }}</td>
+                                                <td>{{ departement.observation }}</td>
+                                                <td>{{ departement.dateCreation|date("Y-m-d") }}</td>
+                                                <td>
+                                                    <a href="{{ path("editer_departement", {id: departement.id}) }}" class="btn btn-primary">Modifier</a>
+                                                    <a href="{{ path("delete_departement", {id: departement.id}) }}" class="btn btn-primary">Supprimer</a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+
+  {% endblock %}
