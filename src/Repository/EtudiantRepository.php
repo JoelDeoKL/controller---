@@ -18,25 +18,11 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  * @method Etudiant[]    findAll()
  * @method Etudiant[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class EtudiantRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
+class EtudiantRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Etudiant::class);
-    }
-
-    /**
-     * Used to upgrade (rehash) the user's password automatically over time.
-     */
-    public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
-    {
-        if (!$user instanceof Etudiant) {
-            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $user::class));
-        }
-
-        $user->setPassword($newHashedPassword);
-        $this->getEntityManager()->persist($user);
-        $this->getEntityManager()->flush();
     }
 
 //    /**

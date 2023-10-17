@@ -6,13 +6,13 @@ use App\Repository\EtudiantRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\DBAL\Types\Types;
 
 #[ORM\Entity(repositoryClass: EtudiantRepository::class)]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class Etudiant implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -44,8 +44,8 @@ class Etudiant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $promotion = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $date_creation = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $date_creation = null;
 
     #[ORM\OneToMany(mappedBy: 'etudiant', targetEntity: Tache::class)]
     private Collection $taches;
@@ -75,7 +75,7 @@ class Etudiant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->email;
     }
 
-    public function setEmail(string $email): static
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 
@@ -87,7 +87,7 @@ class Etudiant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->nom;
     }
 
-    public function setNom(string $nom): static
+    public function setNom(string $nom): self
     {
         $this->nom = $nom;
 
@@ -99,7 +99,7 @@ class Etudiant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->postnom;
     }
 
-    public function setPostnom(string $postnom): static
+    public function setPostnom(string $postnom): self
     {
         $this->postnom = $postnom;
 
@@ -111,7 +111,7 @@ class Etudiant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->prenom;
     }
 
-    public function setPrenom(string $prenom): static
+    public function setPrenom(string $prenom): self
     {
         $this->prenom = $prenom;
 
@@ -123,7 +123,7 @@ class Etudiant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->telephone_etudiant;
     }
 
-    public function setTelephoneEtudiant(string $telephone_etudiant): static
+    public function setTelephoneEtudiant(string $telephone_etudiant): self
     {
         $this->telephone_etudiant = $telephone_etudiant;
 
@@ -135,7 +135,7 @@ class Etudiant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->etat_etudiant;
     }
 
-    public function setEtatEtudiant(?string $etat_etudiant): static
+    public function setEtatEtudiant(?string $etat_etudiant): self
     {
         $this->etat_etudiant = $etat_etudiant;
 
@@ -150,7 +150,7 @@ class Etudiant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->demandes;
     }
 
-    public function addDemande(Demande $demande): static
+    public function addDemande(Demande $demande): self
     {
         if (!$this->demandes->contains($demande)) {
             $this->demandes->add($demande);
@@ -160,7 +160,7 @@ class Etudiant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeDemande(Demande $demande): static
+    public function removeDemande(Demande $demande): self
     {
         if ($this->demandes->removeElement($demande)) {
             // set the owning side to null (unless already changed)
@@ -200,7 +200,7 @@ class Etudiant implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
-    public function setRoles(array $roles): static
+    public function setRoles(array $roles): self
     {
         $this->roles = $roles;
 
@@ -215,7 +215,7 @@ class Etudiant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->password;
     }
 
-    public function setPassword(string $password): static
+    public function setPassword(string $password): self
     {
         $this->password = $password;
 
@@ -236,24 +236,25 @@ class Etudiant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->promotion;
     }
 
-    public function setPromotion(string $promotion): static
+    public function setPromotion(string $promotion): self
     {
         $this->promotion = $promotion;
 
         return $this;
     }
 
-    public function getDateCreation(): ?\DateTimeInterface
+    public function getDateCreation(): ?string
     {
         return $this->date_creation;
     }
 
-    public function setDateCreation(\DateTimeInterface $date_creation): static
+    public function setDateCreation(string $date_creation): self
     {
         $this->date_creation = $date_creation;
 
         return $this;
     }
+
 
     /**
      * @return Collection<int, Tache>
@@ -263,7 +264,7 @@ class Etudiant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->taches;
     }
 
-    public function addTach(Tache $tach): static
+    public function addTach(Tache $tach): self
     {
         if (!$this->taches->contains($tach)) {
             $this->taches->add($tach);
@@ -273,7 +274,7 @@ class Etudiant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeTach(Tache $tach): static
+    public function removeTach(Tache $tach): self
     {
         if ($this->taches->removeElement($tach)) {
             // set the owning side to null (unless already changed)

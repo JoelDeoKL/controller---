@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Form\EtudiantType;
 use App\Entity\Etudiant;
@@ -24,7 +25,7 @@ class EtudiantController extends AbstractController
     }
 
     #[Route('/editer_etudiant/{id?0}', name: 'editer_etudiant')]
-    public function editer_etudiant(Etudiant $etudiant = null, ManagerRegistry $doctrine, Request $request): Response
+    public function editer_etudiant(Etudiant $etudiant = null, ManagerRegistry $doctrine, Request $request, UserPasswordHasherInterface $userPasswordHasher): Response
     {
         $new = false;
         if(!$etudiant){
@@ -38,6 +39,13 @@ class EtudiantController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted()){
+
+            $etudiant->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $etudiant,
+                    $form->get('password')->getData()
+                )
+            );
 
             $manager = $doctrine->getManager();
             $manager->persist($etudiant);
