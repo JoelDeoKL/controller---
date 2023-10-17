@@ -21,7 +21,7 @@ class EntrepriseType extends AbstractType
             ->add('secteur_entreprise')
             ->add('date_creation')
             ->add('date_validation')
-            ->add('email_entreprise')
+            ->add('email')
             ->add('nombre_place')
             ->add('rccm')
             ->add('logo')

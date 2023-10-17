@@ -4,8 +4,9 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Form\EntrepriseType;
+use App\Form\RegistrationFormType;
 use App\Entity\Entreprise;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -16,7 +17,7 @@ class HomeController extends AbstractController
 {
 
     #[Route('/', name: 'app_home')]
-    public function index(Entreprise $entreprise = null, ManagerRegistry $doctrine, Request $request): Response
+    public function index(Entreprise $entreprise = null, ManagerRegistry $doctrine, Request $request, UserPasswordHasherInterface $userPasswordHasher): Response
     {
         $new = false;
         if(!$entreprise){
@@ -24,16 +25,24 @@ class HomeController extends AbstractController
             $entreprise = new Entreprise();
         }
 
-        $form = $this->createForm(EntrepriseType::class, $entreprise);
+        $registrationForm = $this->createForm(RegistrationFormType::class, $entreprise);
 
         //dd($request->request);
-        $form->handleRequest($request);
+        $registrationForm->handleRequest($request);
 
-        if($form->isSubmitted()){
+        if($registrationForm->isSubmitted()){
+
+            //dd($request->request);
+            $entreprise->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $entreprise,
+                    $registrationForm->get('password')->getData()
+                )
+            );
 
             $manager = $doctrine->getManager();
             $manager->persist($entreprise);
-                
+
             $manager->flush();
 
             if($new){
@@ -47,7 +56,7 @@ class HomeController extends AbstractController
             return $this->redirectToRoute("app_home");
         }else{
             return $this->render('home/index.html.twig', [
-                'form' => $form->createView()
+                'registrationForm' => $registrationForm->createView()
             ]);
         }
     }
@@ -71,7 +80,7 @@ class HomeController extends AbstractController
         return $this->render('stagiaire/index.html.twig');
     }
 
-    #[Route('/login', name: 'login')]
+    #[Route('/login_', name: 'login')]
     public function login(): Response
     {
         return $this->render('login.html.twig');

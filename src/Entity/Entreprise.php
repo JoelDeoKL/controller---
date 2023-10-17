@@ -7,9 +7,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: EntrepriseRepository::class)]
-class Entreprise
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+class Entreprise implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -34,14 +38,14 @@ class Entreprise
     #[ORM\Column(length: 255)]
     private ?string $secteur_entreprise = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $date_creation = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $date_creation = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $date_validation = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $date_validation = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $email_entreprise = null;
+    #[ORM\Column(length: 180, unique: true)]
+    private ?string $email = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $nombre_place = null;
@@ -57,9 +61,6 @@ class Entreprise
 
     #[ORM\OneToMany(mappedBy: 'entreprise', targetEntity: Departement::class)]
     private Collection $departements;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $password = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $telephone = null;
@@ -81,6 +82,16 @@ class Entreprise
         $this->departements = new ArrayCollection();
     }
 
+    #[ORM\Column]
+    private array $roles = [];
+
+    /**
+     * @var string The hashed password
+     * @ORM\Column(type="string")
+     */
+    #[ORM\Column]
+    private ?string $password = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -91,7 +102,7 @@ class Entreprise
         return $this->nom_entreprise;
     }
 
-    public function setNomEntreprise(string $nom_entreprise): static
+    public function setNomEntreprise(string $nom_entreprise): self
     {
         $this->nom_entreprise = $nom_entreprise;
 
@@ -103,7 +114,7 @@ class Entreprise
         return $this->description_entreprise;
     }
 
-    public function setDescriptionEntreprise(string $description_entreprise): static
+    public function setDescriptionEntreprise(string $description_entreprise): self
     {
         $this->description_entreprise = $description_entreprise;
 
@@ -115,7 +126,7 @@ class Entreprise
         return $this->adresse_entreprise;
     }
 
-    public function setAdresseEntreprise(string $adresse_entreprise): static
+    public function setAdresseEntreprise(string $adresse_entreprise): self
     {
         $this->adresse_entreprise = $adresse_entreprise;
 
@@ -127,7 +138,7 @@ class Entreprise
         return $this->telephone_entreprise;
     }
 
-    public function setTelephoneEntreprise(string $telephone_entreprise): static
+    public function setTelephoneEntreprise(string $telephone_entreprise): self
     {
         $this->telephone_entreprise = $telephone_entreprise;
 
@@ -139,7 +150,7 @@ class Entreprise
         return $this->etat_entreprise;
     }
 
-    public function setEtatEntreprise(string $etat_entreprise): static
+    public function setEtatEntreprise(string $etat_entreprise): self
     {
         $this->etat_entreprise = $etat_entreprise;
 
@@ -151,45 +162,33 @@ class Entreprise
         return $this->secteur_entreprise;
     }
 
-    public function setSecteurEntreprise(string $secteur_entreprise): static
+    public function setSecteurEntreprise(string $secteur_entreprise): self
     {
         $this->secteur_entreprise = $secteur_entreprise;
 
         return $this;
     }
 
-    public function getDateCreation(): ?\DateTimeInterface
-    {
-        return $this->date_creation;
-    }
-
-    public function setDateCreation(\DateTimeInterface $date_creation): static
-    {
-        $this->date_creation = $date_creation;
-
-        return $this;
-    }
-
-    public function getDateValidation(): ?\DateTimeInterface
+    public function getDateValidation(): ?string
     {
         return $this->date_validation;
     }
 
-    public function setDateValidation(\DateTimeInterface $date_validation): static
+    public function setDateValidation(string $secteur_entreprise): self
     {
-        $this->date_validation = $date_validation;
+        $this->secteur_entreprise = $secteur_entreprise;
 
         return $this;
     }
 
-    public function getEmailEntreprise(): ?string
+    public function getSetCreation(): ?string
     {
-        return $this->email_entreprise;
+        return $this->date_creation;
     }
 
-    public function setEmailEntreprise(string $email_entreprise): static
+    public function setSetCreation(string $date_creation): self
     {
-        $this->email_entreprise = $email_entreprise;
+        $this->date_creation = $date_creation;
 
         return $this;
     }
@@ -199,7 +198,7 @@ class Entreprise
         return $this->nombre_place;
     }
 
-    public function setNombrePlace(int $nombre_place): static
+    public function setNombrePlace(int $nombre_place): self
     {
         $this->nombre_place = $nombre_place;
 
@@ -214,7 +213,7 @@ class Entreprise
         return $this->cote;
     }
 
-    public function addCote(Cote $cote): static
+    public function addCote(Cote $cote): self
     {
         if (!$this->cote->contains($cote)) {
             $this->cote->add($cote);
@@ -224,7 +223,7 @@ class Entreprise
         return $this;
     }
 
-    public function removeCote(Cote $cote): static
+    public function removeCote(Cote $cote): self
     {
         if ($this->cote->removeElement($cote)) {
             // set the owning side to null (unless already changed)
@@ -244,7 +243,7 @@ class Entreprise
         return $this->validations;
     }
 
-    public function addValidation(Validation $validation): static
+    public function addValidation(Validation $validation): self
     {
         if (!$this->validations->contains($validation)) {
             $this->validations->add($validation);
@@ -254,7 +253,7 @@ class Entreprise
         return $this;
     }
 
-    public function removeValidation(Validation $validation): static
+    public function removeValidation(Validation $validation): self
     {
         if ($this->validations->removeElement($validation)) {
             // set the owning side to null (unless already changed)
@@ -274,7 +273,7 @@ class Entreprise
         return $this->demandes;
     }
 
-    public function addDemande(Demande $demande): static
+    public function addDemande(Demande $demande): self
     {
         if (!$this->demandes->contains($demande)) {
             $this->demandes->add($demande);
@@ -284,7 +283,7 @@ class Entreprise
         return $this;
     }
 
-    public function removeDemande(Demande $demande): static
+    public function removeDemande(Demande $demande): self
     {
         if ($this->demandes->removeElement($demande)) {
             // set the owning side to null (unless already changed)
@@ -304,7 +303,7 @@ class Entreprise
         return $this->departements;
     }
 
-    public function addDepartement(Departement $departement): static
+    public function addDepartement(Departement $departement): self
     {
         if (!$this->departements->contains($departement)) {
             $this->departements->add($departement);
@@ -314,7 +313,7 @@ class Entreprise
         return $this;
     }
 
-    public function removeDepartement(Departement $departement): static
+    public function removeDepartement(Departement $departement): self
     {
         if ($this->departements->removeElement($departement)) {
             // set the owning side to null (unless already changed)
@@ -326,29 +325,12 @@ class Entreprise
         return $this;
     }
 
-    public function __toString()
-    {
-        return $this->nom_entreprise;
-    }
-
-    public function getPassword(): ?string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): static
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
     public function getTelephone(): ?string
     {
         return $this->telephone;
     }
 
-    public function setTelephone(string $telephone): static
+    public function setTelephone(string $telephone): self
     {
         $this->telephone = $telephone;
 
@@ -360,7 +342,7 @@ class Entreprise
         return $this->logo;
     }
 
-    public function setLogo(string $logo): static
+    public function setLogo(string $logo): self
     {
         $this->logo = $logo;
 
@@ -372,7 +354,7 @@ class Entreprise
         return $this->rccm;
     }
 
-    public function setRccm(string $rccm): static
+    public function setRccm(string $rccm): self
     {
         $this->rccm = $rccm;
 
@@ -384,10 +366,80 @@ class Entreprise
         return $this->idnat;
     }
 
-    public function setIdnat(string $idnat): static
+    public function setIdnat(string $idnat): self
     {
         $this->idnat = $idnat;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->nom_entreprise;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 }

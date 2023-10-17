@@ -24,7 +24,7 @@ class EtudiantType extends AbstractType
             ->add('postnom')
             ->add('prenom')
             ->add('promotion')
-            ->add('email_etudiant')
+            ->add('email')
             ->add('telephone_etudiant')
             ->add('etat_etudiant')
             ->add('date_creation', DateType::class, [

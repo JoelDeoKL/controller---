@@ -701,20 +701,26 @@
           </div>
 
           <div class="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch">
-            {{ form_start(form, {'attr': {
+
+            {% for flash_error in app.flashes('verify_email_error') %}
+              <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+            {% endfor %}
+
+            {{ form_errors(registrationForm) }}
+            {{ form_start(registrationForm, {'attr': {
               'style':'width: 100%;border-top: 3px solid #47b2e4; border-bottom: 3px solid #47b2e4;padding: 30px;background: #fff;box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.12);'
             }}) }}
               <div class="row">
                 <div class="form-group col-md-6">
-                  {{ form_label(form.nom_entreprise) }}
-                  {{ form_widget(form.nom_entreprise, {'attr': {
+                  {{ form_label(registrationForm.nom_entreprise) }}
+                  {{ form_widget(registrationForm.nom_entreprise, {'attr': {
                       'class':'required form-control',
                       'placeholder':'KCC SA'
                   }}) }}
                 </div>
                 <div class="form-group col-md-6">
-                  {{ form_label(form.email_entreprise) }}
-                  {{ form_widget(form.email_entreprise, {'attr': {
+                  {{ form_label(registrationForm.email) }}
+                  {{ form_widget(registrationForm.email, {'attr': {
                       'class':'required form-control',
                       'placeholder':'contact@entreprise.com'
                   }}) }}
@@ -722,15 +728,15 @@
               </div>
               <div class="row">
                 <div class="form-group col-md-6">
-                    {{ form_label(form.secteur_entreprise) }}
-                    {{ form_widget(form.secteur_entreprise, {'attr': {
+                    {{ form_label(registrationForm.secteur_entreprise) }}
+                    {{ form_widget(registrationForm.secteur_entreprise, {'attr': {
                         'class':'required form-control',
                         'placeholder':'Reseaux et télécommunication'
                     }}) }}
                 </div>
                 <div class="form-group col-md-6">
-                    {{ form_label(form.telephone_entreprise) }}
-                    {{ form_widget(form.telephone_entreprise, {'attr': {
+                    {{ form_label(registrationForm.telephone_entreprise) }}
+                    {{ form_widget(registrationForm.telephone_entreprise, {'attr': {
                         'class':'required form-control',
                         'placeholder':'+243 999 039 123'
                     }}) }}
@@ -738,15 +744,15 @@
               </div>
               <div class="row">
                 <div class="form-group col-md-6">
-                    {{ form_label(form.adresse_entreprise) }}
-                    {{ form_widget(form.adresse_entreprise, {'attr': {
+                    {{ form_label(registrationForm.adresse_entreprise) }}
+                    {{ form_widget(registrationForm.adresse_entreprise, {'attr': {
                         'class':'required form-control',
                         'placeholder':'05 avenue x'
                     }}) }}
                 </div>
                 <div class="form-group col-md-6">
-                    {{ form_label(form.nombre_place) }}
-                    {{ form_widget(form.nombre_place, {'attr': {
+                    {{ form_label(registrationForm.nombre_place) }}
+                    {{ form_widget(registrationForm.nombre_place, {'attr': {
                         'class':'required form-control',
                         'placeholder':'10 Stagiares'
                     }}) }}
@@ -754,15 +760,15 @@
               </div>
               <div class="row">
                 <div class="form-group col-md-6">
-                    {{ form_label(form.rccm) }}
-                    {{ form_widget(form.rccm, {'attr': {
+                    {{ form_label(registrationForm.rccm) }}
+                    {{ form_widget(registrationForm.rccm, {'attr': {
                         'class':'required form-control',
                         'placeholder':'RCCM-'
                     }}) }}
                 </div>
                 <div class="form-group col-md-6">
-                    {{ form_label(form.idnat) }}
-                    {{ form_widget(form.idnat, {'attr': {
+                    {{ form_label(registrationForm.idnat) }}
+                    {{ form_widget(registrationForm.idnat, {'attr': {
                         'class':'required form-control',
                         'placeholder':'ID-NAT'
                     }}) }}
@@ -770,16 +776,20 @@
               </div>
               <div class="row">
                 <div class="form-group col-md-6">
-                  {{ form_label(form.description_entreprise) }}
-                  {{ form_widget(form.description_entreprise, {'attr': {
+                  {{ form_label(registrationForm.description_entreprise) }}
+                  {{ form_widget(registrationForm.description_entreprise, {'attr': {
                       'class':'required form-control',
                       'row':'30',
                   }}) }}
                 </div>
-                
-              
-              
-              <div class="text-center">{{ form_widget(form.postuler, {'attr': {'class':'btn btn-primaryr'}}) }}</div>
+                <div class="form-group col-md-6">
+                  {{ form_label(registrationForm.password) }}
+                  {{ form_widget(registrationForm.password, {'attr': {
+                    'class':'required form-control',
+                  }}) }}
+                </div>
+              </div>
+              <div class="text-center">{{ form_widget(registrationForm.postuler, {'attr': {'class':'btn btn-primaryr'}}) }}</div>
             </form>
           </div>
 
