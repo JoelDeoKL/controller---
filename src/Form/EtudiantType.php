@@ -24,14 +24,16 @@ class EtudiantType extends AbstractType
             ->add('postnom')
             ->add('prenom')
             ->add('promotion')
-            ->add('email')
             ->add('telephone_etudiant')
             ->add('etat_etudiant')
-            ->add('date_creation')
+            ->add('date_creation', DateType::class, [
+                'html5' => false,
+                'format' => 'dd/MM/yyy'
+            ])
+            ->add('email')
             ->add('password', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
-
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
                     new NotBlank([

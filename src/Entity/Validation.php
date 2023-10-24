@@ -14,9 +14,6 @@ class Validation
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $nom_etudiant = null;
-
     #[ORM\ManyToOne(inversedBy: 'validations')]
     private ?Entreprise $entreprise = null;
 
@@ -35,24 +32,15 @@ class Validation
     #[ORM\Column(length: 255)]
     private ?string $type = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_validation = null;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Etudiant $etudiant = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getNomEtudiant(): ?string
-    {
-        return $this->nom_etudiant;
-    }
-
-    public function setNomEtudiant(string $nom_etudiant): static
-    {
-        $this->nom_etudiant = $nom_etudiant;
-
-        return $this;
     }
 
     public function getEntreprise(): ?Entreprise
@@ -135,6 +123,18 @@ class Validation
     public function setDateValidation(\DateTimeInterface $date_validation): static
     {
         $this->date_validation = $date_validation;
+
+        return $this;
+    }
+
+    public function getEtudiant(): ?Etudiant
+    {
+        return $this->etudiant;
+    }
+
+    public function setEtudiant(?Etudiant $etudiant): static
+    {
+        $this->etudiant = $etudiant;
 
         return $this;
     }

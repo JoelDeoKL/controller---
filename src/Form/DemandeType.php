@@ -20,7 +20,7 @@ class DemandeType extends AbstractType
             ->add('type', ChoiceType::class, [
                 'choices' => [
                     'Stage Academique' => 'Stage Academique',
-                    '>Stage Proffessionel' => '>Stage Proffessionel'
+                    'Stage Proffessionel' => 'Stage Proffessionel'
                 ],
             ])
             ->add('observation')

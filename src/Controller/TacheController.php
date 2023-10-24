@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Entreprise;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,10 +22,29 @@ class TacheController extends AbstractController
         return $this->render('stagiaire/taches.html.twig', ['taches' => $taches]);
     }
 
+    #[Route('/les_taches', name: 'les_taches')]
+    public function les_taches(EntityManagerInterface $entityManager, Request $request): Response
+    {
+        $session = $request->getSession();
+        $entreprise = $entityManager->getRepository(Entreprise::class)->findBy(["email" => $session->all()["_security.last_username"]]);
+
+        $taches = $entityManager->getRepository(Tache::class)->findBy(["entreprise" => $entreprise]);
+
+        return $this->render('rh/taches.html.twig', ['taches' => $taches]);
+    }
+
+    #[Route('/lesTaches', name: 'lesTaches')]
+    public function lesTaches(EntityManagerInterface $entityManager, Request $request): Response
+    {
+        $taches = $entityManager->getRepository(Tache::class)->findAll();
+
+        return $this->render('admin/taches.html.twig', ['taches' => $taches]);
+    }
+
     #[Route('/taches_encours', name: 'taches_encours')]
     public function taches_encours(EntityManagerInterface $entityManager): Response
     {
-        $taches = $entityManager->getRepository(Tache::class)->findAll();
+        $taches = $entityManager->getRepository(Tache::class)->findBy(['etat' => 'En cours']);
 
         return $this->render('stagiaire/taches.html.twig', ['taches' => $taches]);
     }
@@ -32,7 +52,15 @@ class TacheController extends AbstractController
     #[Route('/taches_remplies', name: 'taches_remplies')]
     public function taches_remplies(EntityManagerInterface $entityManager): Response
     {
-        $taches = $entityManager->getRepository(Tache::class)->findAll();
+        $taches = $entityManager->getRepository(Tache::class)->findBy(['etat' => 'Remplie']);
+
+        return $this->render('stagiaire/taches.html.twig', ['taches' => $taches]);
+    }
+
+    #[Route('/taches_suspendues', name: 'taches_suspendues')]
+    public function taches_suspendues(EntityManagerInterface $entityManager): Response
+    {
+        $taches = $entityManager->getRepository(Tache::class)->findBy(['etat' => 'Suspendue']);
 
         return $this->render('stagiaire/taches.html.twig', ['taches' => $taches]);
     }

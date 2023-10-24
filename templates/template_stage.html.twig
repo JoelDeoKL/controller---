@@ -93,8 +93,17 @@
                         <a class="collapse-item" href="{{ path("mes_taches") }}">Voir toutes les taches</a>
                         <a class="collapse-item" href="{{ path("taches_encours") }}">Voir les taches en cours</a>
                         <a class="collapse-item" href="{{ path("taches_remplies") }}">Voir les taches remplies</a>
+                        <a class="collapse-item" href="{{ path("taches_suspendues") }}">Voir les taches remplies</a>
                     </div>
                 </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ path('app_logout') }}"
+                   aria-expanded="true" aria-controls="collapseUtilities">
+                    <i class="fas fa-fw fa-wrench"></i>
+                    <span>Deconnexion</span>
+                </a>
             </li>
 
             <!-- Divider -->
@@ -304,7 +313,7 @@
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="{{ path('app_logout') }}">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>

@@ -28,6 +28,7 @@ class TacheType extends AbstractType
             ->add('date_fermeture')
             ->add('etudiant')
             ->add('departement')
+            ->add('entreprise')
             ->add('editer', SubmitType::class)
         ;
     }

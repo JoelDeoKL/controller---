@@ -5,13 +5,9 @@ namespace App\Repository;
 use App\Entity\Entreprise;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 
 /**
  * @extends ServiceEntityRepository<Entreprise>
-* @implements PasswordUpgraderInterface<Entreprise>
  *
  * @method Entreprise|null find($id, $lockMode = null, $lockVersion = null)
  * @method Entreprise|null findOneBy(array $criteria, array $orderBy = null)

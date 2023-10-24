@@ -12,7 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class EntrepriseController extends AbstractController
 {
-    #[Route('/entreprises', name: 'entreprises')]
+    #[Route('/--entreprises', name: 'entreprises')]
     public function entreprises(EntityManagerInterface $entityManager): Response
     {
         $entreprises = $entityManager->getRepository(Entreprise::class)->findAll();
@@ -65,8 +65,46 @@ class EntrepriseController extends AbstractController
     #[Route('/les_entreprises', name: 'les_entreprises')]
     public function les_entreprises(EntityManagerInterface $entityManager): Response
     {
-        $entreprises = $entityManager->getRepository(Entreprise::class)->findAll();
+        $entreprises = $entityManager->getRepository(Entreprise::class)->findBy(['etat_entreprise' => 'Partenaire']);
 
         return $this->render('stagiaire/entreprises.html.twig', ['entreprises' => $entreprises]);
+    }
+
+    #[Route('/entreprise_partenaire', name: 'entreprise_partenaire')]
+    public function entreprise_partenaire(EntityManagerInterface $entityManager): Response
+    {
+        $entreprises = $entityManager->getRepository(Entreprise::class)->findBy(['etat_entreprise' => 'Partenaire']);
+
+        return $this->render('admin/entreprises_partenaire.html.twig', ['entreprises' => $entreprises]);
+    }
+
+    #[Route('/entreprise_attente', name: 'entreprise_attente')]
+    public function entreprise_attente(EntityManagerInterface $entityManager): Response
+    {
+        $entreprises = $entityManager->getRepository(Entreprise::class)->findBy(['etat_entreprise' => 'En attente']);
+
+        return $this->render('admin/entreprises_attente.html.twig', ['entreprises' => $entreprises]);
+    }
+
+    #[Route('/accepter_entreprise/{id<\d+>}', name: 'accepter_entreprise')]
+    public function accepter_entreprise(ManagerRegistry $doctrine, Entreprise $entreprise= null, $id): Response
+    {
+        if(!$entreprise){
+            $this->addFlash('error', "Cet entreprise n'existe pas !");
+            return $this->redirectToRoute("entreprises");
+        }
+
+        $entreprise->setEtatEntreprise("Partenaire");
+
+        $date = new \DateTime();
+        $entreprise->setDateValidation($date);
+
+
+        $manager = $doctrine->getManager();
+        $manager->persist($entreprise);
+
+        $manager->flush();
+
+        return $this->redirectToRoute("entreprise_attente");
     }
 }

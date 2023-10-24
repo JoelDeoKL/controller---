@@ -38,6 +38,9 @@ class Tache
     #[ORM\ManyToOne(inversedBy: 'taches')]
     private ?Departement $departement = null;
 
+    #[ORM\ManyToOne(inversedBy: 'taches')]
+    private ?Entreprise $entreprise = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -135,6 +138,18 @@ class Tache
     public function setDepartement(?Departement $departement): static
     {
         $this->departement = $departement;
+
+        return $this;
+    }
+
+    public function getEntreprise(): ?Entreprise
+    {
+        return $this->entreprise;
+    }
+
+    public function setEntreprise(?Entreprise $entreprise): static
+    {
+        $this->entreprise = $entreprise;
 
         return $this;
     }

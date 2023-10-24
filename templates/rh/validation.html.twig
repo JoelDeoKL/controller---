@@ -1,0 +1,105 @@
+{% extends 'template_rh.html.twig' %}
+
+{% block title %} EspaceStage | Valider stage {% endblock %}
+
+{% block body %}
+              
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+            <!-- Page Heading -->
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0 text-gray-800">Voici le formulaire de stage</h1>
+            </div>
+
+            <!-- Content Row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 style='text-align:center'>Formulaire validation</h1>
+                    {{ form_start(form) }}
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        {{ form_label(form.entreprise) }}
+                                        {{ form_widget(form.entreprise, {'attr': {
+                                            'class':'required form-control',
+                                        }}) }}
+                                        
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        {{ form_label(form.etudiant) }}
+                                        {{ form_widget(form.etudiant, {'attr': {
+                                            'class':'required form-control',
+                                        }}) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        {{ form_label(form.date_debut) }}
+                                        {{ form_widget(form.date_debut, {'attr': {
+                                            'class':'required form-control',
+                                        }}) }}
+                                        
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        {{ form_label(form.date_fin) }}
+                                        {{ form_widget(form.date_fin, {'attr': {
+                                            'class':'required form-control',
+                                        }}) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        {{ form_label(form.duree) }}
+                                        {{ form_widget(form.duree, {'attr': {
+                                            'class':'required form-control',
+                                            'placeholder':'2 mois'
+                                        }}) }}
+                                        
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        {{ form_label(form.observation) }}
+                                        {{ form_widget(form.observation, {'attr': {
+                                            'class':'required form-control',
+                                        }}) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        {{ form_label(form.type) }}
+                                        {{ form_widget(form.type, {'attr': {
+                                            'class':'required form-control',
+                                        }}) }}
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="card-footer"> 
+                        {{ form_widget(form.editer, {'attr': {'class':'btn btn-primary'}}) }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Row -->
+
+        </div>
+        <!-- /.container-fluid -->
+
+    </div>
+    <!-- End of Main Content -->
+
+  {% endblock %}

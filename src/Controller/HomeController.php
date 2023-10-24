@@ -2,22 +2,26 @@
 
 namespace App\Controller;
 
+use App\Entity\Etudiant;
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Form\RegistrationFormType;
+use App\Form\EntrepriseType;
 use App\Entity\Entreprise;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use function Monolog\Formatter\format;
 
 
 class HomeController extends AbstractController
 {
 
     #[Route('/', name: 'app_home')]
-    public function index(Entreprise $entreprise = null, ManagerRegistry $doctrine, Request $request, UserPasswordHasherInterface $userPasswordHasher): Response
+    public function index(Entreprise $entreprise = null, ManagerRegistry $doctrine, Request $request, UserPasswordHasherInterface $userPasswordHasher, SluggerInterface $slugger): Response
     {
         $new = false;
         if(!$entreprise){
@@ -25,24 +29,57 @@ class HomeController extends AbstractController
             $entreprise = new Entreprise();
         }
 
-        $registrationForm = $this->createForm(RegistrationFormType::class, $entreprise);
+        $form = $this->createForm(EntrepriseType::class, $entreprise);
 
         //dd($request->request);
-        $registrationForm->handleRequest($request);
+        $form->handleRequest($request);
 
-        if($registrationForm->isSubmitted()){
+        if($form->isSubmitted()){
 
-            //dd($request->request);
-            $entreprise->setPassword(
+            $user = new User();
+
+            $user->setPassword(
                 $userPasswordHasher->hashPassword(
-                    $entreprise,
-                    $registrationForm->get('password')->getData()
+                    $user,
+                    $form->get('password')->getData()
                 )
             );
 
+            $image = $form->get('logo')->getData();
+
+            if ($image) {
+
+                $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$image->guessExtension();
+
+                try {
+                    $image->move(
+                        $this->getParameter('image_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                }
+
+                $entreprise->setLogo($newFilename);
+                $user->setLogo($newFilename);
+                $user->setNom($form->get('nom_entreprise')->getData());
+            }
+
+            $user->setEmail($form->get('email')->getData());
+
+            $entreprise->setPassword($user->getPassword());
+            $entreprise->setEtatEntreprise("En attente");
+
+            $dateD = new \DateTime();
+            $date = $dateD->format('Y-m-d');
+
+            $entreprise->setDateCreation($date);
+
             $manager = $doctrine->getManager();
             $manager->persist($entreprise);
-
+            $manager->persist($user);
+                
             $manager->flush();
 
             if($new){
@@ -56,7 +93,7 @@ class HomeController extends AbstractController
             return $this->redirectToRoute("app_home");
         }else{
             return $this->render('home/index.html.twig', [
-                'registrationForm' => $registrationForm->createView()
+                'form' => $form->createView()
             ]);
         }
     }
@@ -80,9 +117,35 @@ class HomeController extends AbstractController
         return $this->render('stagiaire/index.html.twig');
     }
 
-    #[Route('/login_', name: 'login')]
-    public function login(): Response
+    #[Route('/redirection', name: 'redirection')]
+    public function redirection(EntityManagerInterface $entityManager, Request $request): Response
     {
-        return $this->render('login.html.twig');
+        $session = $request->getSession();
+
+        $user = $entityManager->getRepository(Entreprise::class)->findBy([
+            "email" => $session->all()["_security.last_username"],
+        ]);
+
+        $user2 = $entityManager->getRepository(Etudiant::class)->findBy(["email" => $session->all()["_security.last_username"]]);
+
+        $user3 = $entityManager->getRepository(User::class)->findBy(["email" => $session->all()["_security.last_username"]]);
+
+        if ($user){
+            if ($user[0]->getEtatEntreprise() == "Partenaire"){
+                return $this->redirectToRoute("rh");
+            }else{
+                return $this->redirectToRoute("app_home");
+            }
+        }else if ($user2){
+            return $this->redirectToRoute("stagiaire");
+        }else if ($user3){
+            return $this->redirectToRoute("coordonateur");
+        }else {
+            return $this->redirectToRoute("app_home");
+        }
+
+        if ($user3){
+            return $this->redirectToRoute("coordonateur");
+        }
     }
 }

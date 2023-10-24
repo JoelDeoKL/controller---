@@ -88,8 +88,8 @@
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href='{{ path("entreprises") }}'>Entreprises partenaire</a>
-                        <a class="collapse-item" href="utilities-color.html">Entreprises en attente</a>
+                        <a class="collapse-item" href='{{ path("entreprise_partenaire") }}'>Entreprises partenaire</a>
+                        <a class="collapse-item" href="{{ path("entreprise_attente") }}">Entreprises en attente</a>
                     </div>
                 </div>
             </li>
@@ -102,8 +102,10 @@
                 </a>
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="login.html">Voir tous les rapports</a>
-                        <a class="collapse-item" href="register.html">Voir les cotes</a>
+                        <a class="collapse-item" href="{{ path('lesTaches') }}">Voir tous les rapports</a>
+                        <a class="collapse-item" href="{{ path('les_cotes') }}">Voir cotes entreprise</a>
+                        <a class="collapse-item" href="{{ path('nos_cotes') }}">Voir nos cotes</a>
+                        <a class="collapse-item" href="{{ path('edite_cote') }}">Donner une cote</a>
                     </div>
                 </div>
             </li>
@@ -259,7 +261,7 @@
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="{{ path('app_logout') }}" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>

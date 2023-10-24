@@ -7,18 +7,23 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: EntrepriseRepository::class)]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
-class Entreprise implements UserInterface, PasswordAuthenticatedUserInterface
+class Entreprise
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+
+    #[ORM\Column(length: 180, unique: true)]
+    private ?string $email = null;
+
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column]
+    private ?string $password = null;
 
     #[ORM\Column(length: 255)]
     private ?string $nom_entreprise = null;
@@ -38,14 +43,11 @@ class Entreprise implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $secteur_entreprise = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $date_creation = null;
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $date_creation = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $date_validation = null;
-
-    #[ORM\Column(length: 180, unique: true)]
-    private ?string $email = null;
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $date_validation = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $nombre_place = null;
@@ -74,23 +76,17 @@ class Entreprise implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $idnat = null;
 
+    #[ORM\OneToMany(mappedBy: 'entreprise', targetEntity: Tache::class)]
+    private Collection $taches;
+
     public function __construct()
     {
         $this->cote = new ArrayCollection();
         $this->validations = new ArrayCollection();
         $this->demandes = new ArrayCollection();
         $this->departements = new ArrayCollection();
+        $this->taches = new ArrayCollection();
     }
-
-    #[ORM\Column]
-    private array $roles = [];
-
-    /**
-     * @var string The hashed password
-     * @ORM\Column(type="string")
-     */
-    #[ORM\Column]
-    private ?string $password = null;
 
     public function getId(): ?int
     {
@@ -102,7 +98,7 @@ class Entreprise implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->nom_entreprise;
     }
 
-    public function setNomEntreprise(string $nom_entreprise): self
+    public function setNomEntreprise(string $nom_entreprise): static
     {
         $this->nom_entreprise = $nom_entreprise;
 
@@ -114,7 +110,7 @@ class Entreprise implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->description_entreprise;
     }
 
-    public function setDescriptionEntreprise(string $description_entreprise): self
+    public function setDescriptionEntreprise(string $description_entreprise): static
     {
         $this->description_entreprise = $description_entreprise;
 
@@ -126,7 +122,7 @@ class Entreprise implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->adresse_entreprise;
     }
 
-    public function setAdresseEntreprise(string $adresse_entreprise): self
+    public function setAdresseEntreprise(string $adresse_entreprise): static
     {
         $this->adresse_entreprise = $adresse_entreprise;
 
@@ -138,7 +134,7 @@ class Entreprise implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->telephone_entreprise;
     }
 
-    public function setTelephoneEntreprise(string $telephone_entreprise): self
+    public function setTelephoneEntreprise(string $telephone_entreprise): static
     {
         $this->telephone_entreprise = $telephone_entreprise;
 
@@ -150,7 +146,7 @@ class Entreprise implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->etat_entreprise;
     }
 
-    public function setEtatEntreprise(string $etat_entreprise): self
+    public function setEtatEntreprise(string $etat_entreprise): static
     {
         $this->etat_entreprise = $etat_entreprise;
 
@@ -162,33 +158,33 @@ class Entreprise implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->secteur_entreprise;
     }
 
-    public function setSecteurEntreprise(string $secteur_entreprise): self
+    public function setSecteurEntreprise(string $secteur_entreprise): static
     {
         $this->secteur_entreprise = $secteur_entreprise;
 
         return $this;
     }
 
-    public function getDateValidation(): ?string
-    {
-        return $this->date_validation;
-    }
-
-    public function setDateValidation(string $secteur_entreprise): self
-    {
-        $this->secteur_entreprise = $secteur_entreprise;
-
-        return $this;
-    }
-
-    public function getSetCreation(): ?string
+    public function getDateCreation(): ?\DateTimeInterface
     {
         return $this->date_creation;
     }
 
-    public function setSetCreation(string $date_creation): self
+    public function setDateCreation(\DateTimeInterface $date_creation): static
     {
         $this->date_creation = $date_creation;
+
+        return $this;
+    }
+
+    public function getDateValidation(): ?\DateTimeInterface
+    {
+        return $this->date_validation;
+    }
+
+    public function setDateValidation(\DateTimeInterface $date_validation): static
+    {
+        $this->date_validation = $date_validation;
 
         return $this;
     }
@@ -198,7 +194,7 @@ class Entreprise implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->nombre_place;
     }
 
-    public function setNombrePlace(int $nombre_place): self
+    public function setNombrePlace(int $nombre_place): static
     {
         $this->nombre_place = $nombre_place;
 
@@ -213,7 +209,7 @@ class Entreprise implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->cote;
     }
 
-    public function addCote(Cote $cote): self
+    public function addCote(Cote $cote): static
     {
         if (!$this->cote->contains($cote)) {
             $this->cote->add($cote);
@@ -223,7 +219,7 @@ class Entreprise implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeCote(Cote $cote): self
+    public function removeCote(Cote $cote): static
     {
         if ($this->cote->removeElement($cote)) {
             // set the owning side to null (unless already changed)
@@ -243,7 +239,7 @@ class Entreprise implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->validations;
     }
 
-    public function addValidation(Validation $validation): self
+    public function addValidation(Validation $validation): static
     {
         if (!$this->validations->contains($validation)) {
             $this->validations->add($validation);
@@ -253,7 +249,7 @@ class Entreprise implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeValidation(Validation $validation): self
+    public function removeValidation(Validation $validation): static
     {
         if ($this->validations->removeElement($validation)) {
             // set the owning side to null (unless already changed)
@@ -273,7 +269,7 @@ class Entreprise implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->demandes;
     }
 
-    public function addDemande(Demande $demande): self
+    public function addDemande(Demande $demande): static
     {
         if (!$this->demandes->contains($demande)) {
             $this->demandes->add($demande);
@@ -283,7 +279,7 @@ class Entreprise implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeDemande(Demande $demande): self
+    public function removeDemande(Demande $demande): static
     {
         if ($this->demandes->removeElement($demande)) {
             // set the owning side to null (unless already changed)
@@ -303,7 +299,7 @@ class Entreprise implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->departements;
     }
 
-    public function addDepartement(Departement $departement): self
+    public function addDepartement(Departement $departement): static
     {
         if (!$this->departements->contains($departement)) {
             $this->departements->add($departement);
@@ -313,7 +309,7 @@ class Entreprise implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeDepartement(Departement $departement): self
+    public function removeDepartement(Departement $departement): static
     {
         if ($this->departements->removeElement($departement)) {
             // set the owning side to null (unless already changed)
@@ -325,12 +321,17 @@ class Entreprise implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function __toString()
+    {
+        return $this->nom_entreprise;
+    }
+    
     public function getTelephone(): ?string
     {
         return $this->telephone;
     }
 
-    public function setTelephone(string $telephone): self
+    public function setTelephone(string $telephone): static
     {
         $this->telephone = $telephone;
 
@@ -342,7 +343,7 @@ class Entreprise implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->logo;
     }
 
-    public function setLogo(string $logo): self
+    public function setLogo(string $logo): static
     {
         $this->logo = $logo;
 
@@ -354,7 +355,7 @@ class Entreprise implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->rccm;
     }
 
-    public function setRccm(string $rccm): self
+    public function setRccm(string $rccm): static
     {
         $this->rccm = $rccm;
 
@@ -366,16 +367,11 @@ class Entreprise implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->idnat;
     }
 
-    public function setIdnat(string $idnat): self
+    public function setIdnat(string $idnat): static
     {
         $this->idnat = $idnat;
 
         return $this;
-    }
-
-    public function __toString()
-    {
-        return $this->nom_entreprise;
     }
 
     public function getEmail(): ?string
@@ -383,38 +379,9 @@ class Entreprise implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->email;
     }
 
-    public function setEmail(string $email): self
+    public function setEmail(string $email): static
     {
         $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
-    public function getUserIdentifier(): string
-    {
-        return (string) $this->email;
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function getRoles(): array
-    {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
-    }
-
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
 
         return $this;
     }
@@ -427,7 +394,7 @@ class Entreprise implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(string $password): static
     {
         $this->password = $password;
 
@@ -435,11 +402,33 @@ class Entreprise implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @see UserInterface
+     * @return Collection<int, Tache>
      */
-    public function eraseCredentials(): void
+    public function getTaches(): Collection
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        return $this->taches;
     }
+
+    public function addTach(Tache $tach): static
+    {
+        if (!$this->taches->contains($tach)) {
+            $this->taches->add($tach);
+            $tach->setEntreprise($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTach(Tache $tach): static
+    {
+        if ($this->taches->removeElement($tach)) {
+            // set the owning side to null (unless already changed)
+            if ($tach->getEntreprise() === $this) {
+                $tach->setEntreprise(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

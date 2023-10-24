@@ -48,10 +48,19 @@
                                         
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-3">
                                     <div class="form-group">
                                         {{ form_label(form.departement) }}
                                         {{ form_widget(form.departement, {'attr': {
+                                            'class':'required form-control',
+                                            'placeholder':'Informatique'
+                                        }}) }}
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        {{ form_label(form.entreprise) }}
+                                        {{ form_widget(form.entreprise, {'attr': {
                                             'class':'required form-control',
                                             'placeholder':'Informatique'
                                         }}) }}

@@ -38,11 +38,11 @@
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
                 <div class="sidebar-brand-icon">
                     <div class="dropdown-list-image mr-3">
-                         <img width="50" src="{{ asset('home_assets/assets/img/logo.png') }}" alt="user image">
+                         <img width="50" src="{{ asset('uploads/images/') }}{{ app.user.logo }}" alt="user image">
                         <div class="status-indicator bg-success"></div>
                     </div>
                 </div>
-                <div class="sidebar-brand-text mx-3">BOLLORE  <sup>Ress Humaines</sup></div>
+                <div class="sidebar-brand-text mx-3">{{ app.user.nom }}  <sup>RH</sup></div>
             </a>
 
             <!-- Divider -->
@@ -88,9 +88,8 @@
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="">Voir tous les etudiants</a>
-                        <a class="collapse-item" href="{{ path("demandes") }}">Voir les demandes en cours</a>
-                        <a class="collapse-item" href="">Affecter à un departement</a>
+                        <a class="collapse-item" href="{{ path("nos_etudiants") }}">Voir tous les etudiants</a>
+                        <a class="collapse-item" href="{{ path("nos_demandes") }}">Voir les demandes en cours</a>
                         <a class="collapse-item" href="">Attribuer une cote</a>
                     </div>
                 </div>
@@ -100,12 +99,13 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                     aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-folder"></i>
-                    <span>Rapports du stage</span>
+                    <span>Bilan du stage</span>
                 </a>
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="login.html">Voir tous les taches</a>
-                        <a class="collapse-item" href="register.html">Voir les cotes</a>ù
+                        <a class="collapse-item" href="{{ path('les_taches') }}">Voir les taches</a>
+                        <a class="collapse-item" href="{{ path('editer_cote') }}">Coter Etudiant</a>
+                        <a class="collapse-item" href="{{ path('cotes') }}">Voir les cotes</a>
                     </div>
                 </div>
             </li>
@@ -317,7 +317,7 @@
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="{{ path('app_logout') }}">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>

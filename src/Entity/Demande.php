@@ -38,7 +38,7 @@ class Demande
     #[ORM\ManyToOne(inversedBy: 'demandes')]
     private ?Entreprise $entreprise = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $etat = null;
 
     public function getId(): ?int

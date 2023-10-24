@@ -21,15 +21,6 @@ class Cote
     private ?float $cote = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $nom_etudiant = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $postnom = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $prenom = null;
-
-    #[ORM\Column(length: 255)]
     private ?string $promotion = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
@@ -37,6 +28,9 @@ class Cote
 
     #[ORM\Column(length: 255)]
     private ?string $provenance = null;
+
+    #[ORM\ManyToOne(inversedBy: 'cotes')]
+    private ?Etudiant $etudiant = null;
 
     public function getId(): ?int
     {
@@ -63,42 +57,6 @@ class Cote
     public function setCote(float $cote): static
     {
         $this->cote = $cote;
-
-        return $this;
-    }
-
-    public function getNomEtudiant(): ?string
-    {
-        return $this->nom_etudiant;
-    }
-
-    public function setNomEtudiant(string $nom_etudiant): static
-    {
-        $this->nom_etudiant = $nom_etudiant;
-
-        return $this;
-    }
-
-    public function getPostnom(): ?string
-    {
-        return $this->postnom;
-    }
-
-    public function setPostnom(string $postnom): static
-    {
-        $this->postnom = $postnom;
-
-        return $this;
-    }
-
-    public function getPrenom(): ?string
-    {
-        return $this->prenom;
-    }
-
-    public function setPrenom(string $prenom): static
-    {
-        $this->prenom = $prenom;
 
         return $this;
     }
@@ -135,6 +93,18 @@ class Cote
     public function setProvenance(string $provenance): static
     {
         $this->provenance = $provenance;
+
+        return $this;
+    }
+
+    public function getEtudiant(): ?Etudiant
+    {
+        return $this->etudiant;
+    }
+
+    public function setEtudiant(?Etudiant $etudiant): static
+    {
+        $this->etudiant = $etudiant;
 
         return $this;
     }

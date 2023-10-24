@@ -6,14 +6,14 @@ use App\Repository\EtudiantRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\DBAL\Types\Types;
 
 #[ORM\Entity(repositoryClass: EtudiantRepository::class)]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
-class Etudiant implements UserInterface, PasswordAuthenticatedUserInterface
+class Etudiant
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -22,6 +22,12 @@ class Etudiant implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
+
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column]
+    private ?string $password = null;
 
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
@@ -44,42 +50,25 @@ class Etudiant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $promotion = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $date_creation = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $date_creation = null;
 
     #[ORM\OneToMany(mappedBy: 'etudiant', targetEntity: Tache::class)]
     private Collection $taches;
+
+    #[ORM\OneToMany(mappedBy: 'etudiant', targetEntity: Cote::class)]
+    private Collection $cotes;
 
     public function __construct()
     {
         $this->demandes = new ArrayCollection();
         $this->taches = new ArrayCollection();
+        $this->cotes = new ArrayCollection();
     }
-
-    #[ORM\Column]
-    private array $roles = [];
-
-    /**
-     * @var string The hashed password
-     */
-    #[ORM\Column]
-    private ?string $password = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): self
-    {
-        $this->email = $email;
-
-        return $this;
     }
 
     public function getNom(): ?string
@@ -87,7 +76,7 @@ class Etudiant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->nom;
     }
 
-    public function setNom(string $nom): self
+    public function setNom(string $nom): static
     {
         $this->nom = $nom;
 
@@ -99,7 +88,7 @@ class Etudiant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->postnom;
     }
 
-    public function setPostnom(string $postnom): self
+    public function setPostnom(string $postnom): static
     {
         $this->postnom = $postnom;
 
@@ -111,9 +100,21 @@ class Etudiant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->prenom;
     }
 
-    public function setPrenom(string $prenom): self
+    public function setPrenom(string $prenom): static
     {
         $this->prenom = $prenom;
+
+        return $this;
+    }
+
+    public function getEmailEtudiant(): ?string
+    {
+        return $this->email_etudiant;
+    }
+
+    public function setEmailEtudiant(string $email_etudiant): static
+    {
+        $this->email_etudiant = $email_etudiant;
 
         return $this;
     }
@@ -123,7 +124,7 @@ class Etudiant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->telephone_etudiant;
     }
 
-    public function setTelephoneEtudiant(string $telephone_etudiant): self
+    public function setTelephoneEtudiant(string $telephone_etudiant): static
     {
         $this->telephone_etudiant = $telephone_etudiant;
 
@@ -135,7 +136,7 @@ class Etudiant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->etat_etudiant;
     }
 
-    public function setEtatEtudiant(?string $etat_etudiant): self
+    public function setEtatEtudiant(?string $etat_etudiant): static
     {
         $this->etat_etudiant = $etat_etudiant;
 
@@ -150,7 +151,7 @@ class Etudiant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->demandes;
     }
 
-    public function addDemande(Demande $demande): self
+    public function addDemande(Demande $demande): static
     {
         if (!$this->demandes->contains($demande)) {
             $this->demandes->add($demande);
@@ -160,7 +161,7 @@ class Etudiant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeDemande(Demande $demande): self
+    public function removeDemande(Demande $demande): static
     {
         if ($this->demandes->removeElement($demande)) {
             // set the owning side to null (unless already changed)
@@ -177,32 +178,68 @@ class Etudiant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->nom . " " . $this->postnom . " " . $this->prenom;
     }
 
-
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
-    public function getUserIdentifier(): string
+    public function getPromotion(): ?string
     {
-        return (string) $this->email;
+        return $this->promotion;
+    }
+
+    public function setPromotion(string $promotion): static
+    {
+        $this->promotion = $promotion;
+
+        return $this;
+    }
+
+    public function getDateCreation(): ?\DateTimeInterface
+    {
+        return $this->date_creation;
+    }
+
+    public function setDateCreation(\DateTimeInterface $date_creation): static
+    {
+        $this->date_creation = $date_creation;
+
+        return $this;
     }
 
     /**
-     * @see UserInterface
+     * @return Collection<int, Tache>
      */
-    public function getRoles(): array
+    public function getTaches(): Collection
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
+        return $this->taches;
     }
 
-    public function setRoles(array $roles): self
+    public function addTach(Tache $tach): static
     {
-        $this->roles = $roles;
+        if (!$this->taches->contains($tach)) {
+            $this->taches->add($tach);
+            $tach->setEtudiant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTach(Tache $tach): static
+    {
+        if ($this->taches->removeElement($tach)) {
+            // set the owning side to null (unless already changed)
+            if ($tach->getEtudiant() === $this) {
+                $tach->setEtudiant(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
 
         return $this;
     }
@@ -215,7 +252,7 @@ class Etudiant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(string $password): static
     {
         $this->password = $password;
 
@@ -223,66 +260,33 @@ class Etudiant implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @see UserInterface
+     * @return Collection<int, Cote>
      */
-    public function eraseCredentials(): void
+    public function getCotes(): Collection
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        return $this->cotes;
     }
 
-    public function getPromotion(): ?string
+    public function addCote(Cote $cote): static
     {
-        return $this->promotion;
-    }
-
-    public function setPromotion(string $promotion): self
-    {
-        $this->promotion = $promotion;
-
-        return $this;
-    }
-
-    public function getDateCreation(): ?string
-    {
-        return $this->date_creation;
-    }
-
-    public function setDateCreation(string $date_creation): self
-    {
-        $this->date_creation = $date_creation;
-
-        return $this;
-    }
-
-
-    /**
-     * @return Collection<int, Tache>
-     */
-    public function getTaches(): Collection
-    {
-        return $this->taches;
-    }
-
-    public function addTach(Tache $tach): self
-    {
-        if (!$this->taches->contains($tach)) {
-            $this->taches->add($tach);
-            $tach->setEtudiant($this);
+        if (!$this->cotes->contains($cote)) {
+            $this->cotes->add($cote);
+            $cote->setEtudiant($this);
         }
 
         return $this;
     }
 
-    public function removeTach(Tache $tach): self
+    public function removeCote(Cote $cote): static
     {
-        if ($this->taches->removeElement($tach)) {
+        if ($this->cotes->removeElement($cote)) {
             // set the owning side to null (unless already changed)
-            if ($tach->getEtudiant() === $this) {
-                $tach->setEtudiant(null);
+            if ($cote->getEtudiant() === $this) {
+                $cote->setEtudiant(null);
             }
         }
 
         return $this;
     }
+
 }

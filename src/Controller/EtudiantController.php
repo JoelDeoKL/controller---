@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Entity\Validation;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -24,6 +26,14 @@ class EtudiantController extends AbstractController
         return $this->render('admin/etudiants.html.twig', ['etudiants' => $etudiants]);
     }
 
+    #[Route('/nos_etudiants', name: 'nos_etudiants')]
+    public function nos_etudiants(EntityManagerInterface $entityManager): Response
+    {
+        $validations = $entityManager->getRepository(Validation::class)->findAll();
+
+        return $this->render('rh/nos_etudiants.html.twig', ['validations' => $validations]);
+    }
+
     #[Route('/editer_etudiant/{id?0}', name: 'editer_etudiant')]
     public function editer_etudiant(Etudiant $etudiant = null, ManagerRegistry $doctrine, Request $request, UserPasswordHasherInterface $userPasswordHasher): Response
     {
@@ -40,15 +50,23 @@ class EtudiantController extends AbstractController
 
         if($form->isSubmitted()){
 
-            $etudiant->setPassword(
+            $user = new User();
+
+            $user->setPassword(
                 $userPasswordHasher->hashPassword(
-                    $etudiant,
+                    $user,
                     $form->get('password')->getData()
                 )
             );
 
+            $user->setEmail($form->get('email')->getData());
+
+            $etudiant->setPassword($user->getPassword());
+            $etudiant->setEtatEtudiant("En attente");
+
             $manager = $doctrine->getManager();
             $manager->persist($etudiant);
+            $manager->persist($user);
                 
             $manager->flush();
 
