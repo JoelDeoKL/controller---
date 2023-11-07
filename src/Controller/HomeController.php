@@ -74,7 +74,7 @@ class HomeController extends AbstractController
             $dateD = new \DateTime();
             $date = $dateD->format('Y-m-d');
 
-            $entreprise->setDateCreation($date);
+            $entreprise->setDateCreation($dateD);
 
             $manager = $doctrine->getManager();
             $manager->persist($entreprise);
